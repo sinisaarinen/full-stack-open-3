@@ -17,12 +17,12 @@ let persons = [
     {
         id: 3,
         name: "Dan Abramov",
-        date: "12-43-234345"
+        number: "12-43-234345"
     },
     {
         id: 4,
         name: "Mary Poppendick",
-        date: "39-23-6423122"
+        number: "39-23-6423122"
     }
 ]
 
@@ -48,9 +48,34 @@ app.get('/api/persons/:id', (req, res) => {
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(p => p.id !== id)
-  
+
     res.status(204).end()
-  })
+})
+
+const generateId = () => {
+    return Math.floor(Math.random() * 50)
+}
+
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+
+    if (!body.name || !body.number) {
+        return res.status(400).json({
+            error: 'content missing'
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateId(),
+    }
+
+    persons = persons.concat(person)
+
+    res.json(person)
+
+})
 
 app.get('/info', (req, res) => {
     res.send(info)
