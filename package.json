@@ -1,0 +1,27 @@
+{
+  "name": "full-stack-open-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinisaarinen/full-stack-open-3.git"
+  },
+  "author": "Sini Saarinen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sinisaarinen/full-stack-open-3/issues"
+  },
+  "homepage": "https://github.com/sinisaarinen/full-stack-open-3#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
