@@ -3,7 +3,6 @@ const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
-app.use(morgan('tiny'))
 
 let persons = [
     {
@@ -33,11 +32,11 @@ let date = new Date()
 
 let info = `Phonebook has info for ${contacts} people. ${date}`
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', morgan('tiny'), (req, res) => {
     res.json(persons)
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', morgan('tiny'), (req, res) => {
     const id = Number(req.params.id)
     const person = persons.find(p => p.id === id)
     if (person) {
@@ -47,7 +46,7 @@ app.get('/api/persons/:id', (req, res) => {
     }
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', morgan('tiny'), (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(p => p.id !== id)
 
@@ -58,7 +57,11 @@ const generateId = () => {
     return Math.floor(Math.random() * 50)
 }
 
-app.post('/api/persons', (req, res) => {
+morgan.token('body', req => {
+    return JSON.stringify(req.body)
+})
+
+app.post('/api/persons', morgan(':method :url :status :res[content-length] - :response-time ms :body'), (req, res) => {
     const body = req.body
 
     if (!body.name) {
@@ -89,7 +92,7 @@ app.post('/api/persons', (req, res) => {
 
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', morgan('tiny'), (req, res) => {
     res.send(info)
 })
 
