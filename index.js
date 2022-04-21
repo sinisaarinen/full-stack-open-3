@@ -5,6 +5,7 @@ const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('build'))
 
 let persons = [
     {
@@ -28,11 +29,6 @@ let persons = [
         number: "39-23-6423122"
     }
 ]
-
-let contacts = persons.length
-let date = new Date()
-
-let info = `Phonebook has info for ${contacts} people. ${date}`
 
 app.get('/api/persons', morgan('tiny'), (req, res) => {
     res.json(persons)
@@ -95,6 +91,8 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
 })
 
 app.get('/info', morgan('tiny'), (req, res) => {
+    let date = new Date()
+    let info = `Phonebook has info for ${persons.length} people. ${date}`
     res.send(info)
 })
 
