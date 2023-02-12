@@ -2,46 +2,32 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+require('dotenv').config()
+
+const Person = require('./models/person')
 
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
 
-let persons = [
-    {
-        id: 1,
-        name: "Arto Hellas",
-        number: "040-123456"
-    },
-    {
-        id: 2,
-        name: "Ada Lovelace",
-        number: "39-44-5323523"
-    },
-    {
-        id: 3,
-        name: "Dan Abramov",
-        number: "12-43-234345"
-    },
-    {
-        id: 4,
-        name: "Mary Poppendick",
-        number: "39-23-6423122"
-    }
-]
-
-app.get('/api/persons', morgan('tiny'), (req, res) => {
-    res.json(persons)
-})
+let persons = []
 
 app.get('/api/persons/:id', morgan('tiny'), (req, res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(p => p.id === id)
-    if (person) {
+    Person.findById(req.params.id).then(person => {
         res.json(person)
-    } else {
-        res.status(404).end()
-    }
+    })
+})
+
+app.get('/api/notes/:id', (request, response) => {
+    Note.findById(request.params.id).then(note => {
+      response.json(note)
+    })
+  })
+
+app.get('/api/persons', morgan('tiny'), (req, res) => {
+    Person.find({}).then(persons => {
+        res.json(persons)
+    })
 })
 
 app.delete('/api/persons/:id', morgan('tiny'), (req, res) => {
@@ -62,6 +48,10 @@ morgan.token('body', req => {
 app.post('/api/persons', morgan(':method :url :status :res[content-length] - :response-time ms :body'), (req, res) => {
     const body = req.body
 
+    if (body.content === undefined) {
+        return res.status(400).json({ error: 'content missing' })
+      }
+
     if (!body.name) {
         return res.status(400).json({
             error: 'name missing'
@@ -78,15 +68,17 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
         })
     }
 
-    const person = {
+    const person = new Person({
         name: body.name,
         number: body.number,
         id: generateId(),
-    }
+    })
 
     persons = persons.concat(person)
 
-    res.json(person)
+    person.save().then(savedPerson => {
+        res.json(savedPerson)
+      })    
 
 })
 
@@ -96,7 +88,7 @@ app.get('/info', morgan('tiny'), (req, res) => {
     res.send(info)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
