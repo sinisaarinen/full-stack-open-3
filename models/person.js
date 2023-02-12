@@ -8,14 +8,15 @@ console.log('connecting to', url)
 mongoose.connect(url)
   .then(result => {
     console.log('connected to MongoDB')
+    console.log(process.env.PORT)
   })
   .catch((error) => {
     console.log('error connecting to MongoDB:', error.message)
   })
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: { type: String, minlength: 3, required: true, unique: true },
+    number: { type: String, minlength: 3, required: true },
 })
 
 personSchema.set('toJSON', {
