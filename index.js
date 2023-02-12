@@ -48,14 +48,10 @@ morgan.token('body', req => {
 app.post('/api/persons', morgan(':method :url :status :res[content-length] - :response-time ms :body'), (req, res) => {
     const body = req.body
 
-    if (body.content === undefined) {
-        return res.status(400).json({ error: 'content missing' })
-      }
-
     if (!body.name) {
-        return res.status(400).json({
-            error: 'name missing'
-        })
+      return res.status(400).json({
+        error: 'name missing'
+    })
     }
     if (!body.number) {
         return res.status(400).json({
@@ -71,14 +67,13 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
     const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId(),
     })
 
     persons = persons.concat(person)
 
     person.save().then(savedPerson => {
         res.json(savedPerson)
-      })    
+    })    
 
 })
 
@@ -88,7 +83,7 @@ app.get('/info', morgan('tiny'), (req, res) => {
     res.send(info)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
