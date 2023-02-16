@@ -30,12 +30,6 @@ app.get('/api/persons/:id', morgan('tiny'), (req, res, next) => {
         .catch(error => next(error))
 })
 
-app.get('/api/notes/:id', (request, response) => {
-    Note.findById(request.params.id).then(note => {
-      response.json(note)
-    })
-  })
-
 app.get('/api/persons', morgan('tiny'), (req, res) => {
     Person.find({}).then(persons => {
         res.json(persons)
@@ -84,8 +78,10 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
 
 app.get('/info', morgan('tiny'), (req, res) => {
     let date = new Date()
-    let info = `Phonebook has info for ${persons.length} people. ${date}`
-    res.send(info)
+    Person.find({}).then(persons => {
+        let info = `Phonebook has info for ${persons.length} people. ${date}`
+        res.send(info)    
+    })
 })
 
 const unknownEndpoint = (req, res) => {
