@@ -71,19 +71,6 @@ morgan.token('body', req => {
 
 app.post('/api/persons', morgan(':method :url :status :res[content-length] - :response-time ms :body'), (req, res, next) => {
     const body = req.body
-    console.log("tässä")
-    console.log(body.name)
-    console.log(body.number)
-    console.log(body.name.length)
-    console.log(body.name === undefined || body.name.length < 3)
-
-    // if (body.name === undefined || body.name.length < 3) {
-    //     console.log("moi")
-    //     return res.status(400).json({ error: 'name missing' })
-    // }
-    // if (body.number === undefined || body.number.length < 3) {
-    //     return res.status(400).json({ error: 'number missing' })
-    // }
 
     const person = new Person({
         name: body.name,
