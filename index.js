@@ -99,7 +99,8 @@ const errorHandler = (error, req, res, next) => {
     }
 
     if (error.name === 'ValidationError') {
-      return res.status(400).json({error: 'Name and number must be at least 3 characters long'})}
+      return res.status(400).json({ error: error.message })
+    }
   
     next(error)
 }
