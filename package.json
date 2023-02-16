@@ -8,7 +8,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "build:ui": "rm -rf build && cd /home/sinisaarinen/full-stack-open-exercises/osa2/puhelinluettelo/ && npm run build && cp -r build /home/sinisaarinen/full-stack-open-3/",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.34.0",
     "nodemon": "^2.0.15"
   }
 }
